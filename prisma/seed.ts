@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const main = async (numRecords: number = 30) => {
+const main = async (numRecords: number = 64) => {
   console.log('Starting seed script');
   await prisma.snippet.deleteMany({});
   console.log('deleted all records');
@@ -16,7 +16,10 @@ const main = async (numRecords: number = 30) => {
             content: `This is the description of snippet ${1} ${
               i % 2 == 0 ? '\n\n\t With line breaks' : 'Without any linebreaks'
             }`,
-            createdAt: new Date(Date.now() - (i + 1) * 3600000),
+            createdAt: new Date(
+              Date.now() - Math.random() * numRecords * 3600000,
+            ),
+            views: Math.random() * numRecords,
           },
         });
       }),
