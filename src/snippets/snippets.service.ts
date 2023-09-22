@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Snippet } from '@prisma/client';
+import { Prisma, Snippet } from '@prisma/client';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { GetSnippetsQueryParamsDto } from './dto/get-snippets-query-params.dto';
 import { PAGE_SIZE, SNIPPET_EXPIRY_TIME } from './constants';
@@ -21,13 +21,21 @@ export class SnippetsService {
   ): Promise<Snippet[]> {
     //Todo: implement cursor pagination
     const { sortOrder, orderKey } = queryParams;
+    const where: Prisma.SnippetWhereInput = {
+      createdAt: { gte: this.getLastSnippetDate() },
+    };
+    const orderBy: Prisma.SnippetOrderByWithRelationInput =
+      orderKey && sortOrder
+        ? {
+            [orderKey]: sortOrder,
+          }
+        : {};
+
     this.logger.log({ sortOrder, orderKey }, `[SnippetsService:getSnippets]`);
     return this.prisma.snippet.findMany({
-      where: {
-        createdAt: { gte: this.getLastSnippetDate() },
-      },
+      where,
       take: PAGE_SIZE,
-      orderBy: { [orderKey]: sortOrder },
+      orderBy,
     });
   }
 
