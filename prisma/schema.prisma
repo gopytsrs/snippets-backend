@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Snippet {
-  id      Int    @id @default(autoincrement())
-  uuid    String @unique @default(uuid())
-  views   Int    @default(0)
-  title   String @db.Text
-  content String @db.Text
+  id      Int      @id @default(autoincrement())
+  uuid    String   @unique @default(uuid())
+  views   Int      @default(0)
+  title   String   @db.Text
+  content String   @db.Text
+  date    DateTime @default(now())
 }
