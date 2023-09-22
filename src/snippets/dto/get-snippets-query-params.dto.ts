@@ -3,7 +3,7 @@ import { IsInt, IsEnum, IsOptional } from 'class-validator';
 
 export enum OrderKey {
   VIEWS = 'views',
-  DATE = 'date',
+  CREATED_AT = 'createdAt',
 }
 
 export enum SortOrder {
