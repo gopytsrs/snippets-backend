@@ -12,6 +12,7 @@ import { Snippet } from '@prisma/client';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { GetSnippetsQueryParamsDto } from './dto/get-snippets-query-params.dto';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { PaginatedResponse } from './types/PaginatedResponse';
 
 @ApiTags('snippets')
 @Controller('snippets')
@@ -29,7 +30,7 @@ export class SnippetsController {
   })
   async getSnippets(
     @Query() queryParams: GetSnippetsQueryParamsDto,
-  ): Promise<Snippet[]> {
+  ): Promise<PaginatedResponse<Snippet>> {
     return this.snippetsService.getSnippets(queryParams);
   }
 

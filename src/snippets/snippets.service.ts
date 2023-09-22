@@ -4,6 +4,7 @@ import { Prisma, Snippet } from '@prisma/client';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { GetSnippetsQueryParamsDto } from './dto/get-snippets-query-params.dto';
 import { PAGE_SIZE, SNIPPET_EXPIRY_TIME } from './constants';
+import { PaginatedResponse } from './types/PaginatedResponse';
 
 @Injectable()
 export class SnippetsService {
@@ -18,9 +19,9 @@ export class SnippetsService {
 
   async getSnippets(
     queryParams: GetSnippetsQueryParamsDto,
-  ): Promise<Snippet[]> {
+  ): Promise<PaginatedResponse<Snippet>> {
     //Todo: implement cursor pagination
-    const { sortOrder, orderKey } = queryParams;
+    const { sortOrder, orderKey, page } = queryParams;
     const where: Prisma.SnippetWhereInput = {
       createdAt: { gte: this.getLastSnippetDate() },
     };
@@ -31,12 +32,27 @@ export class SnippetsService {
           }
         : {};
 
-    this.logger.log({ sortOrder, orderKey }, `[SnippetsService:getSnippets]`);
-    return this.prisma.snippet.findMany({
-      where,
+    const pagination = {
       take: PAGE_SIZE,
+      skip: page ? (page - 1) * PAGE_SIZE : 0,
+    };
+
+    const total = await this.prisma.snippet.count({ where });
+
+    this.logger.log(
+      { sortOrder, orderKey, page },
+      `[SnippetsService:getSnippets]`,
+    );
+
+    const snippets = await this.prisma.snippet.findMany({
+      where,
+      ...pagination,
       orderBy,
     });
+    return {
+      total,
+      data: snippets,
+    };
   }
 
   async createSnippet(createSnippetDto: CreateSnippetDto): Promise<Snippet> {

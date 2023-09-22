@@ -1,4 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsInt, IsEnum, IsOptional } from 'class-validator';
 
 export enum OrderKey {
@@ -24,5 +25,6 @@ export class GetSnippetsQueryParamsDto {
 
   @ApiPropertyOptional({ description: 'The page to fetch' })
   @IsInt()
-  cursorId: number = 1;
+  @Type(() => Number)
+  page: number = 1;
 }
