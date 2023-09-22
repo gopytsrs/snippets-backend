@@ -33,7 +33,7 @@ export class SnippetsService {
     const orderBy = [
       ...(views ? [{ views }] : []),
       {
-        createdAt: createdAt ? SortOrder.DESC : createdAt,
+        createdAt: createdAt || SortOrder.DESC,
       },
     ];
 
