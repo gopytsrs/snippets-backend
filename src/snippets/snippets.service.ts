@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Snippet } from '@prisma/client';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import {
