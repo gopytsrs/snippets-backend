@@ -1,12 +1,26 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt } from 'class-validator';
+import { IsInt, IsEnum, IsOptional } from 'class-validator';
+
+export enum OrderKey {
+  VIEWS = 'views',
+  DATE = 'date',
+}
+
+export enum SortOrder {
+  DESC = 'desc',
+  ASC = 'asc',
+}
 
 export class GetSnippetsQueryParamsDto {
   @ApiPropertyOptional({ description: 'The key to order the snippets by' })
-  orderKey: 'views' | 'date';
+  @IsEnum(OrderKey)
+  @IsOptional()
+  orderKey?: OrderKey;
 
   @ApiPropertyOptional({ description: 'The sort order' })
-  sortOrder: 'asc' | 'desc';
+  @IsEnum(SortOrder)
+  @IsOptional()
+  sortOrder?: SortOrder;
 
   @ApiPropertyOptional({ description: 'The page to fetch' })
   @IsInt()
