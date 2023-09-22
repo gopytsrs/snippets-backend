@@ -28,11 +28,13 @@ export class SnippetsService {
     const where: Prisma.SnippetWhereInput = {
       createdAt: { gte: this.getLastSnippetDate() },
     };
+
+    // Order matters, should order by view first
     const orderBy = [
+      ...(views ? [{ views }] : []),
       {
         createdAt: createdAt ? SortOrder.DESC : createdAt,
       },
-      ...(views ? [{ views }] : []),
     ];
 
     const pagination = {

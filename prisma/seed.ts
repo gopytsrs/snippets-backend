@@ -16,6 +16,7 @@ const main = async (numRecords: number = 30) => {
             content: `This is the description of snippet ${1} ${
               i % 2 == 0 ? '\n\n\t With line breaks' : 'Without any linebreaks'
             }`,
+            createdAt: new Date(Date.now() - (i + 1) * 3600000),
           },
         });
       }),
