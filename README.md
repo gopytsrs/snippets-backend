@@ -1,8 +1,8 @@
 ## Description
 
-This repository contains the backend code for the Technology Associate Programme 2023 Assignment by GDS Central.
+This repository contains the **backend** code for the Technology Associate Programme 2023 Assignment by GDS Central. For the frontend code, please check the other repository.
 
-The problem selected is Problem 2: [Snippet Sharing Service]
+The problem selected is **Problem 2: [Snippet Sharing Service]**
 
 The assignment was initiated on 22 September 2023 3:19:30pm with a dealine of 72 hours (ResponseID: 650d4002c7baae00125f3be1)
 
@@ -29,7 +29,7 @@ Below are some of the technologies I decided to use for the project with a short
 
   - Meta-framework that provides a structured way to create backend servers, makes use of decorator pattern an dependency injection. Built with TypeScript in mind ensuring type safety and clean code. Also has many built-in plugins for common uses such logging, testing, middleware and validation. I decided to use it here as it provides a sound and structured way of creating endpoints and other useful middleware so I can focus solely on business logic.
 
-- **[PostgreSQL](https://www.postgresql.org/) ([Supbase](https://supabase.com/))**
+- **[PostgreSQL](https://www.postgresql.org/) ([Supabase](https://supabase.com/))**
 
   - PostgreSQL is an open source relational database. I decided to use it in this project due to my familiarity with SQL databases and also vast community plugins and documentation to facilitate easy working with PostgreSQL. Supabase is used as the hosting option for the PostgreSQL database as it is free, quick and easy to setup.
 
@@ -43,7 +43,7 @@ Below are some of the technologies I decided to use for the project with a short
 
 - **[Docker](https://docker.com)**
 
-  - Docker Compose is used to set up the database in local environments, it is used to prevent any incompatabilities in setting up database and also offering a clean slate as long as we rebuild and restart the containers.
+  - Docker Compose is used to set up the database in local environments, it is used to prevent any incompatibilities in setting up database.
 
 - **Other libraries**
   - `pino` for logging and debugging
@@ -74,13 +74,13 @@ First create a docker container of the PostgreSQL database
 $ docker-compose up
 ```
 
-Migrate the prisma schema to make sure models are in sync and that the `PrismaClient` is generated
+Migrate the prisma schema to make sure models are in sync, at the same time, `PrismaClient` is also generated
 
 ```bash
 $ yarn prisma migrate dev
 ```
 
-See the database with some initial data for testing
+You should have seen the seed script running in the console otherwise, seed the database with some initial data for testing
 
 ```bash
 $ yarn prisma db seed
@@ -100,7 +100,7 @@ INFO [13:42:17.898] (on pc1): Nest application successfully started {"context":"
 
 You can now access the backend server at [`http://localhost:3000`](http://localhost:3000)
 
-Swagger is use to generate OpenAPI documentation. After running the app, you can access the api documentation at [`http://localhost:3000/api`](http://localhost:3000/api)
+Swagger is use to generate OpenAPI documentation. After running the app, you can access the API documentation at [`http://localhost:3000/api`](http://localhost:3000/api)
 
 ## Author
 
