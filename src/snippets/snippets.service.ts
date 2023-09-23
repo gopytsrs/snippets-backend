@@ -6,7 +6,7 @@ import {
   GetSnippetsQueryParamsDto,
   SortOrder,
 } from './dto/get-snippets-query-params.dto';
-import { PAGE_SIZE, SNIPPET_EXPIRY_TIME } from './constants';
+import { PAGE_SIZE } from './constants';
 import { PaginatedResponse } from './types/PaginatedResponse';
 
 @Injectable()
@@ -16,8 +16,7 @@ export class SnippetsService {
 
   private getLastSnippetDate(): string {
     // Get the last ate that the snippets will be consiere fresh
-    const lastSnippetDate = Date.now() - SNIPPET_EXPIRY_TIME;
-    return new Date(lastSnippetDate).toISOString();
+    return new Date().toISOString();
   }
 
   async getSnippets(
@@ -25,7 +24,7 @@ export class SnippetsService {
   ): Promise<PaginatedResponse<Snippet>> {
     const { views, createdAt, page } = queryParams;
     const where: Prisma.SnippetWhereInput = {
-      createdAt: { gte: this.getLastSnippetDate() },
+      expiresAt: { gte: this.getLastSnippetDate() },
     };
 
     // Order matters, should order by view first
@@ -60,12 +59,14 @@ export class SnippetsService {
   }
 
   async createSnippet(createSnippetDto: CreateSnippetDto): Promise<Snippet> {
-    const { title, content } = createSnippetDto;
+    const { title, content, expiryInSeconds } = createSnippetDto;
     this.logger.log({ title, content }, `[SnippetsService:createSnippet]`);
     return this.prisma.snippet.create({
       data: {
         title,
         content,
+        createdAt: new Date(Date.now()),
+        expiresAt: new Date(Date.now() + 1000 * expiryInSeconds),
       },
     });
   }

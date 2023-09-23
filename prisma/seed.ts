@@ -16,9 +16,8 @@ const main = async (numRecords: number = 64) => {
             content: `This is the description of snippet ${1} ${
               i % 2 == 0 ? '\n\n\t With line breaks' : 'Without any linebreaks'
             }`,
-            createdAt: new Date(
-              Date.now() - Math.random() * numRecords * 3600000,
-            ),
+            createdAt: new Date(Date.now() - 1000 * 60 * Math.random() * 40),
+            expiresAt: new Date(Date.now() + 1000 * 60 * Math.random() * 15),
             views: Math.random() * numRecords,
           },
         });

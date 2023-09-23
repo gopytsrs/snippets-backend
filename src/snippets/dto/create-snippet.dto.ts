@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsInt } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateSnippetDto {
@@ -15,4 +15,11 @@ export class CreateSnippetDto {
   @IsNotEmpty()
   @IsString()
   content: string;
+
+  @IsInt()
+  @ApiProperty({
+    description: 'The expiry of the snippet in seconds',
+    default: 300,
+  })
+  expiryInSeconds?: number;
 }

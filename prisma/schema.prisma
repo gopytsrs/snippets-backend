@@ -16,5 +16,6 @@ model Snippet {
   views     Int      @default(0)
   title     String   @db.Text
   content   String   @db.Text
-  createdAt DateTime @default(now())
+  createdAt DateTime 
+  expiresAt DateTime
 }
