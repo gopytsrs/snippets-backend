@@ -11,7 +11,13 @@ import { SnippetsService } from './snippets.service';
 import { Snippet } from '@prisma/client';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { GetSnippetsQueryParamsDto } from './dto/get-snippets-query-params.dto';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiInternalServerErrorResponse,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+} from '@nestjs/swagger';
 import { PaginatedResponse } from './types/PaginatedResponse';
 
 @ApiTags('snippets')
@@ -20,12 +26,10 @@ export class SnippetsController {
   constructor(private readonly snippetsService: SnippetsService) {}
 
   @Get()
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'The snippets have been succesfully fetched',
   })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
+  @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
   async getSnippets(
@@ -35,12 +39,11 @@ export class SnippetsController {
   }
 
   @Post('/create')
-  @ApiResponse({
+  @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: 'The snippet has been succesfully created',
   })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
+  @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
   async createSnippet(
@@ -50,17 +53,14 @@ export class SnippetsController {
   }
 
   @Get(':uuid')
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'The snippet has been successfully fetched',
   })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
+  @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Malformed request body',
+  @ApiBadRequestResponse({
+    description: 'Bad request',
   })
   async getSnippet(@Param('uuid') uuid: string): Promise<Snippet> {
     return this.snippetsService.getSnippet(uuid);

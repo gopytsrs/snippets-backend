@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Snippet } from '@prisma/client';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
@@ -14,17 +14,12 @@ export class SnippetsService {
   private readonly logger = new Logger(SnippetsService.name);
   constructor(private prisma: PrismaService) {}
 
-  private getLastSnippetDate(): string {
-    // Get the last ate that the snippets will be consiere fresh
-    return new Date().toISOString();
-  }
-
   async getSnippets(
     queryParams: GetSnippetsQueryParamsDto,
   ): Promise<PaginatedResponse<Snippet>> {
     const { views, createdAt, page } = queryParams;
     const where: Prisma.SnippetWhereInput = {
-      expiresAt: { gte: this.getLastSnippetDate() },
+      expiresAt: { gte: new Date().toISOString() },
     };
 
     // Order matters, should order by view first
@@ -71,11 +66,23 @@ export class SnippetsService {
     });
   }
 
-  async getSnippet(uuid: string): Promise<Snippet> {
+  async getSnippet(uuid: string): Promise<Snippet | null> {
     this.logger.log({ uuid }, `[SnippetsService:getSnippet]`);
-    return this.prisma.snippet.update({
-      where: { uuid },
-      data: { views: { increment: 1 } },
-    });
+    try {
+      return await this.prisma.snippet.update({
+        where: { uuid },
+        data: { views: { increment: 1 } },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        //Record not found ref:https://www.prisma.io/docs/reference/api-reference/error-reference#p2025
+        if (err.code === 'P2025') {
+          throw new BadRequestException(
+            "Snippet with given uuid doesn't exist",
+          );
+        }
+        throw err;
+      }
+    }
   }
 }
