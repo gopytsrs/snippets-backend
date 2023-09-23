@@ -23,7 +23,6 @@ export class SnippetsService {
   async getSnippets(
     queryParams: GetSnippetsQueryParamsDto,
   ): Promise<PaginatedResponse<Snippet>> {
-    //Todo: implement cursor pagination
     const { views, createdAt, page } = queryParams;
     const where: Prisma.SnippetWhereInput = {
       createdAt: { gte: this.getLastSnippetDate() },

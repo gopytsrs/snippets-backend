@@ -8,13 +8,17 @@ export enum SortOrder {
 }
 
 export class GetSnippetsQueryParamsDto {
-  @ApiPropertyOptional({ description: 'What to order the snippets view by' })
+  @ApiPropertyOptional({
+    description: 'What to order the snippets view by',
+    enum: SortOrder,
+  })
   @IsEnum(SortOrder)
   @IsOptional()
   views?: SortOrder;
 
   @ApiPropertyOptional({
     description: 'What to order the snippets createdAt by',
+    enum: SortOrder,
   })
   @IsEnum(SortOrder)
   @IsOptional()
@@ -23,5 +27,5 @@ export class GetSnippetsQueryParamsDto {
   @ApiPropertyOptional({ description: 'The page to fetch' })
   @IsInt()
   @Type(() => Number)
-  page: number = 1;
+  page?: number = 1;
 }
